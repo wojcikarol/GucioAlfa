@@ -1,47 +1,106 @@
-/* Ogólny styl kafelka */
-.tile-device {
-    padding: 2%;
-    margin: 10px; /* Dodanie odstępu między kafelkami */
-    width: 200px; /* Szerokość kafelka */
-    height: 200px; /* Wysokość kafelka */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px; /* Zaokrąglenie krawędzi kafelka */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Dodanie efektu cienia */
-    transition: 0.3s;
+/* Ciemne tło dla całej strony */
+body {
+    background-color: #1a1a1a;  /* Bardzo ciemny szary, prawie czarny */
+    color: #fff;  /* Biały tekst na ciemnym tle */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
 
-/* Styl dla wnętrza kafelka z efektem hover */
-.tile-device-inside {
+.tile-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
     padding: 20px;
+}
+
+.tile {
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    text-align: center;
+    width: 220px;  /* Szerokość kafelka */
+    height: 160px; /* Wysokość kafelka */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
-    transition: 0.5s;
+    box-sizing: border-box;
+    position: relative;
+    background: #006400;  /* Ciemnozielone tło dla dostępnego slotu */
+    color: #fff;
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tile:hover {
+    transform: scale(1.08);  /* Powiększenie kafelka */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);  /* Cień przy najechaniu */
+    cursor: pointer;  /* Wskazanie interaktywności */
+}
+
+.tile-occupied {
+    background: #8B0000;  /* Ciemnoczerwone tło dla zajętego slotu */
+}
+
+.tile-available {
+    background: #006400;  /* Ciemnozielone tło dla dostępnego slotu */
+}
+
+.tile-active {
+    border: 2px solid #007bff;
+}
+
+/* Zmiana koloru tła na ciemniejszy przy najechaniu */
+.tile:hover.tile-occupied {
+    background: linear-gradient(to top, #8B0000 0%, #5c0000 100%);
+}
+
+.tile:hover.tile-available {
+    background: linear-gradient(to top, #006400 0%, #004d00 100%);
+}
+
+/* Tekst, który pojawi się po najechaniu na kafelek */
+.tile .hover-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    opacity: 0;  /* Ukrycie tekstu domyślnie */
+    transition: opacity 0.3s ease;  /* Animacja przejścia */
+}
+
+.tile-occupied:hover .hover-info {
+    opacity: 1;  /* Pokazanie tekstu dla zajętego kafelka */
+}
+
+.tile-available:hover .hover-info {
+    opacity: 1;  /* Pokazanie tekstu dla dostępnego kafelka */
+}
+
+/* Przeniesienie napisu pod kafelek */
+.tile .reservation-info {
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
     text-align: center;
-    color: white; /* Tekst na biało */
-    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    margin-top: 10px;
 }
 
-/* Kolor tła podczas najechania myszką */
-.tile-device-inside:hover {
-    background-color: #264357; /* Ciemny niebieski podczas hover */
+.tile-occupied .reservation-info {
+    color: #ff6666;  /* Jasnoczerwony tekst dla zajętego slotu */
 }
 
-/* Kolor tła dla aktywnego kafelka (np. wybranego slotu) */
-.tile-device-inside.active {
-    background-color: #02b1af; /* Kolor tła dla aktywnego kafelka */
+.tile-available .reservation-info {
+    color: #66ff66;  /* Jasnozielony tekst dla dostępnego slotu */
 }
 
-/* Kolor tła dla zajętych miejsc parkingowych */
-.tile-device-inside.occupied {
-    background-color: #8B0000; /* Ciemnoczerwony dla zajętych */
-}
-
-/* Kolor tła dla wolnych miejsc parkingowych */
-.tile-device-inside.available {
-    background-color: #006400; /* Ciemnozielony dla wolnych */
+.tile:hover .reservation-info {
+    opacity: 1;  /* Pokazanie tekstu poniżej kafelka przy hover */
 }

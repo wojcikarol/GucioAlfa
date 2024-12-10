@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from "./components/Home";
 import ParkingState from './components/ParkingState';
+import ParkingStateView from './components/ParkingStateView';
 
 const darkTheme = createTheme({
     palette: {
@@ -17,7 +18,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/parking-state" element={<ParkingState data={[]} />} />
+        <Route path="/parking-state" element={<ParkingStateView />} />
       </Routes>
     </Router>
   );

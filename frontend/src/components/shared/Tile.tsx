@@ -4,15 +4,27 @@ interface TileProps {
     id: string;
     active: boolean;
     hasData: boolean;
+    occupied: boolean;
     data: IParkingSlot;
 }
 
-function Tile({ id, active, hasData, data }: TileProps) {
+function Tile({ id, active, hasData, occupied, data }: TileProps) {
     return (
-        <div style={{ border: active ? "2px solid green" : "1px solid gray", padding: "10px", margin: "5px" }}>
-            <h3>{`Slot: ${id}`}</h3>
-            <p>{`Occupied: ${hasData ? "Yes" : "No"}`}</p>
-            <p>{`Last Updated: ${data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : "N/A"}`}</p>
+        <div
+            className={`tile ${active ? 'tile-active' : ''} ${occupied ? 'tile-occupied' : 'tile-available'}`}
+            title={`Slot ID: ${id}`}
+        >
+            <p>{`Slot ${id}`}</p>
+            <p>{occupied ? 'Occupied' : 'Available'}</p>
+            {hasData && (
+                <small>
+                    Last Updated: {data.lastUpdated ? new Date(data.lastUpdated).toLocaleString() : "No data available"}
+                </small>
+            )}
+            {/* Informacja o rezerwacji pod kafelkiem */}
+            <div className="reservation-info">
+                {occupied ? 'This spot is reserved' : 'Reserve this spot'}
+            </div>
         </div>
     );
 }
