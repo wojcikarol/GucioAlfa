@@ -1,0 +1,47 @@
+/* Ogólny styl kafelka */
+.tile-device {
+    padding: 2%;
+    margin: 10px; /* Dodanie odstępu między kafelkami */
+    width: 200px; /* Szerokość kafelka */
+    height: 200px; /* Wysokość kafelka */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px; /* Zaokrąglenie krawędzi kafelka */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Dodanie efektu cienia */
+    transition: 0.3s;
+}
+
+/* Styl dla wnętrza kafelka z efektem hover */
+.tile-device-inside {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    transition: 0.5s;
+    text-align: center;
+    color: white; /* Tekst na biało */
+    font-size: 1.2rem;
+}
+
+/* Kolor tła podczas najechania myszką */
+.tile-device-inside:hover {
+    background-color: #264357; /* Ciemny niebieski podczas hover */
+}
+
+/* Kolor tła dla aktywnego kafelka (np. wybranego slotu) */
+.tile-device-inside.active {
+    background-color: #02b1af; /* Kolor tła dla aktywnego kafelka */
+}
+
+/* Kolor tła dla zajętych miejsc parkingowych */
+.tile-device-inside.occupied {
+    background-color: #8B0000; /* Ciemnoczerwony dla zajętych */
+}
+
+/* Kolor tła dla wolnych miejsc parkingowych */
+.tile-device-inside.available {
+    background-color: #006400; /* Ciemnozielony dla wolnych */
+}
