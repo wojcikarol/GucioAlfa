@@ -1,4 +1,9 @@
 /* Home.css */
+.body{
+  background-color: black;
+}
+
+
 .dashboard-container {
     display: flex;
     font-family: Arial, sans-serif;

@@ -7,142 +7,176 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LanguageIcon from '@mui/icons-material/Language';
-import {Link} from 'react-router-dom';
-
-const pages = ['Devices state'];
-const settings = ['Profile', 'Logout'];
+import { Link } from 'react-router-dom';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import axios from 'axios';
 
 function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const [isAdmin, setIsAdmin] = React.useState(false);
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  
+    React.useEffect(() => {
+        const checkAdminStatus = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    const response = await axios.get('/api/user/auth', {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                        }
+                    });
+
+                 
+                    if (!response.data.isAdmin) {
+                        setIsAdmin(false);
+                    } else {
+                        setIsAdmin(true);
+                    }
+                }
+            } catch (error) {
+                console.error('Błąd podczas sprawdzania statusu administratora:', error);
+                setIsAdmin(false);
+            }
+        };
+
+        checkAdminStatus();
+    }, []);
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
     };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
 
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
+    const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+        if (event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
+            return;
+        }
+        setDrawerOpen(open);
     };
 
     return (
-        <AppBar position="static">
-            <Container maxWidth={false} sx={{backgroundColor: 'black'}}>
-                <Toolbar disableGutters>
-
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component={Link}
-                        to="/"
-                        sx={{
-                            mr: 2,
-                            display: {xs: 'none', md: 'flex'},
-                            alignItems: 'center',
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
-                        <LanguageIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
-                        IoT Dashboard
-                    </Typography>
-
-                    <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleOpenNavMenu}
-                            color="inherit"
-                        >
-                            <MenuIcon/>
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElNav}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElNav)}
-                            onClose={handleCloseNavMenu}
+        <>
+          
+            <AppBar position="static">
+                <Container maxWidth={false} sx={{ backgroundColor: 'black' }}>
+                    <Toolbar disableGutters>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component={Link}
+                            to="/"
                             sx={{
-                                display: {xs: 'block', md: 'none'},
+                                mr: 2,
+                                display: { xs: 'none', md: 'flex' },
+                                alignItems: 'center',
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                letterSpacing: '.3rem',
+                                color: 'inherit',
+                                textDecoration: 'none',
                             }}
                         >
-                            {pages.map((page) => (
-                                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                                    <Typography textAlign="center">{page}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                        {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{my: 2, color: 'white', display: 'block'}}
+                            <LanguageIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+                            SMART PARKING
+                        </Typography>
+
+                        <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleOpenNavMenu}
+                                color="inherit"
                             >
-                                {page}
-                            </Button>
-                        ))}
-                    </Box>
-
-                    <div className="logo"></div>
-
-                    {false && <Box sx={{flexGrow: 0}}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg"/>
+                                <MenuIcon />
                             </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{mt: '45px'}}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorElNav}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'left',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'left',
+                                }}
+                                open={Boolean(anchorElNav)}
+                                onClose={handleCloseNavMenu}
+                                sx={{
+                                    display: { xs: 'block', md: 'none' },
+                                }}
+                            >
+                                <MenuItem onClick={handleCloseNavMenu}>
+                                    <Typography textAlign="center">Parking State</Typography>
                                 </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>}
-                </Toolbar>
-            </Container>
-        </AppBar>
+                            </Menu>
+                        </Box>
+
+                        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                            <Button
+                                onClick={handleCloseNavMenu}
+                                sx={{ my: 2, color: 'white', display: 'block' }}
+                            >
+                                Parking State
+                            </Button>
+                        </Box>
+
+                      
+                        {isAdmin && (
+                            <IconButton
+                                size="large"
+                                aria-label="open drawer"
+                                onClick={toggleDrawer(true)}
+                                color="inherit"
+                            >
+                                <AdminPanelSettingsIcon />
+                            </IconButton>
+                        )}
+                    </Toolbar>
+                </Container>
+            </AppBar>
+
+        
+            <Drawer
+                anchor="right"
+                open={drawerOpen}
+                onClose={toggleDrawer(false)}
+            >
+                <Box
+                    sx={{ width: 250 }}
+                    role="presentation"
+                    onClick={toggleDrawer(false)}
+                    onKeyDown={toggleDrawer(false)}
+                >
+                    <List>
+                        <ListItem button component={Link} to="/admin/users">
+                            <ListItemText primary="Manage Users" />
+                        </ListItem>
+                        <Divider />
+                        <ListItem button component={Link} to="/admin/reports">
+                            <ListItemText primary="Export Reports" />
+                        </ListItem>
+                    </List>
+                </Box>
+            </Drawer>
+        </>
     );
 }
 
