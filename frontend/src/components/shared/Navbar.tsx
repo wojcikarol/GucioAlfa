@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppBar, Toolbar, Typography, Button, Drawer, List, ListItem, ListItemText, IconButton, Tooltip, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
-import LocalParkingIcon from '@mui/icons-material/LocalParking';
+import DriveEtaIcon from '@mui/icons-material/DriveEta';  // <-- Added car icon import
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ interface UserToken {
 const Navbar: React.FC = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // useNavigate hook for navigation
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -63,23 +63,33 @@ const Navbar: React.FC = () => {
               letterSpacing: 1,
               color: '#fff',
               marginRight: 2,
+              cursor: 'pointer', // Add cursor pointer for clickable text
             }}
+            onClick={() => navigate('/')} // Navigate to Home page when clicked
           >
-            <LocalParkingIcon sx={{ fontSize: 30, marginRight: 1 }} />
+            <DriveEtaIcon sx={{ fontSize: 30, marginRight: 1 }} />
             Smart Parking
           </Typography>
           <Button
-            color="inherit"
-            onClick={() => navigate('/parking-state')}
-            sx={{
-              textTransform: 'none',
-              fontWeight: 500,
-              paddingX: 2,
-              '&:hover': { backgroundColor: '#1c1c1c' },
-            }}
-          >
-            Parking State
-          </Button>
+  color="inherit"
+  onClick={() => navigate('/parking-state')}
+  sx={{
+    textTransform: 'none',
+    fontWeight: 500,
+    paddingX: 2,
+    borderRadius: 2, // Slightly rounded corners for better look
+    '&:hover': {
+      backgroundColor: '#555', // Darker grey to indicate hover effect
+      borderBottom: '2px solid #fff', // Underline effect on hover
+    },
+    '&:focus': { // Style for focus (in case the button is selected via keyboard)
+      outline: '2px solid #fff', 
+    },
+  }}
+>
+  Parking State
+</Button>
+
         </Box>
 
         {/* Right Section: Logout and Admin Drawer */}
