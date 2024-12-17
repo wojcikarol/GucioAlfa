@@ -1,0 +1,120 @@
+/* Ciemne tło dla całej strony */
+body {
+    background-color: #1a1a1a;  /* Bardzo ciemny szary */
+    color: #000000;  /* Biały tekst */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Kontener dla kafelków */
+.tile-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* Wygląd kafelka */
+.tile {
+    border: 1px solid #333;
+    border-radius: 10px;
+    padding: 15px;
+    width: 220px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #006400;  /* Zielone tło dla dostępnych miejsc */
+    color: #ffffff;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Interakcja z kafelkiem */
+.tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* Kolory dla różnych stanów */
+.tile-occupied {
+    background-color: #8b0000;  /* Czerwony dla zajętego miejsca */
+}
+
+.tile-occupied:hover {
+    background: linear-gradient(to top, #8b0000, #5c0000);
+}
+
+.tile-available {
+    background-color: #006400;  /* Zielony dla wolnego miejsca */
+}
+
+.tile-available:hover {
+    background: linear-gradient(to top, #006400, #004d00);
+}
+
+.tile-active {
+    border: 2px solid #007bff;  /* Podświetlenie aktywnego kafelka */
+}
+
+/* Dodatkowe informacje na kafelku */
+.tile .hover-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tile:hover .hover-info {
+    opacity: 1;
+}
+
+/* Opis pod kafelkiem */
+.tile .reservation-info {
+    font-size: 14px;
+    color: #cccccc;
+    text-align: center;
+    margin-top: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tile:hover .reservation-info {
+    opacity: 1;
+}
+
+/* Responsywność dla mniejszych ekranów */
+@media (max-width: 768px) {
+    .tile {
+        width: 160px;  /* Zmniejszenie szerokości */
+        height: 120px; /* Zmniejszenie wysokości */
+    }
+    
+    .tile-container {
+        gap: 12px;  /* Zmniejszenie odstępu między kafelkami */
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tile {
+        width: 120px;
+        height: 100px;
+        font-size: 12px;  /* Zmniejszenie tekstu */
+    }
+    
+    .tile .hover-info {
+        font-size: 14px;
+    }
+}
