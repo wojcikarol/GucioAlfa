@@ -1,111 +1,64 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  CircularProgress,
-} from "@mui/material";
+import React, { useState } from "react";
+import "./DeviceState.css";
+import Tile from "./shared/Tile";
+import { useParams } from "react-router-dom";
+import { IParkingSlot } from "../models/parkingSlot.model";
 
-interface ParkingSlot {
-  _id: string;
-  slotId: string;
-  isOccupied: boolean;
-  lastUpdated: string;
-  reservationEndTime: string | null;
-  reservedBy: User | null;
+interface ParkingStateProps {
+    data: IParkingSlot[];
 }
 
-interface User {
-  _id: string;
-  email: string;
-  name: string;
-  role: string;
-  isAdmin: boolean;
-}
+const ParkingState: React.FC<ParkingStateProps> = ({ data }) => {
+    let { id } = useParams(); // Pobieramy ID miejsca parkingowego z parametrów URL
 
-interface Car {
-  _id: string;
-  carId: string;
-  type: string;
-  model: string;
-  registration: string;
-}
+    // Dodajemy stan dla rezerwacji
+    const [reservations, setReservations] = useState<{ [key: string]: string }>({});
 
-const ParkingSlotManagement: React.FC = () => {
-  const [parkingSlots, setParkingSlots] = useState<ParkingSlot[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+    // Obsługa dodawania rezerwacji
+    const handleReservation = (slotId: string, duration: string) => {
+        setReservations((prev) => ({
+            ...prev,
+            [slotId]: duration, // Dodajemy rezerwację dla danego slotu
+        }));
+    };
 
-  const fetchParkingSlots = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/data");
-      if (!response.ok) {
-        throw new Error(`Server responded with ${response.status}`);
-      }
+    return (
+        <>
+            <h1 className="parking-state-header">Parking State</h1>
+            {data && (
+                <div className="tile-container">
+                    {data.map((slot) => {
+                        const isActive = id !== undefined && slot.slotId === id; // Sprawdzamy, czy miejsce jest aktywne
+                        const isOccupied = slot.isOccupied; // Sprawdzamy stan "zajęte" lub "dostępne"
+                        const reservationDuration = reservations[slot.slotId]; // Pobieramy czas rezerwacji dla slotu
 
-      const slots: ParkingSlot[] = await response.json();
-      setParkingSlots(slots);
-    } catch (err) {
-      console.error("Error fetching parking slots:", err);
-      setError("Failed to fetch parking slot details.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchParkingSlots();
-  }, []);
-
-  if (loading) return <CircularProgress />;
-  if (error) return <Typography color="error">{error}</Typography>;
-
-  return (
-    <Box sx={{ padding: 3 }}>
-      <Typography variant="h4" sx={{ marginBottom: 2 }}>
-        Parking Slot Management
-      </Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Slot ID</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Last Updated</TableCell>
-              <TableCell>Reserved By</TableCell>
-              <TableCell>Reservation End Time</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {parkingSlots.map((slot) => (
-              <TableRow key={slot._id}>
-                <TableCell>{slot.slotId}</TableCell>
-                <TableCell>{slot.isOccupied ? "Occupied" : "Available"}</TableCell>
-                <TableCell>{new Date(slot.lastUpdated).toLocaleString()}</TableCell>
-                <TableCell>
-                  {slot.reservedBy
-                    ? `${slot.reservedBy.name} (${slot.reservedBy.email})`
-                    : "Not Reserved"}
-                </TableCell>
-                <TableCell>
-                  {slot.reservationEndTime
-                    ? new Date(slot.reservationEndTime).toLocaleString()
-                    : "No End Time"}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
+                        return (
+                            <div
+                                key={slot.slotId}
+                                className={`tile ${isOccupied ? "tile-occupied" : "tile-available"} ${
+                                    isActive ? "tile-active" : ""
+                                }`}
+                            >
+                                <Tile
+                                    id={slot.slotId}
+                                    active={isActive}
+                                    hasData={slot.lastUpdated !== undefined}
+                                    occupied={isOccupied}
+                                    data={slot}
+                                />
+                                {/* Wyświetlenie informacji o rezerwacji */}
+                                {reservationDuration && (
+                                    <div className="reservation-info">
+                                        Reserved for {reservationDuration} minutes
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+        </>
+    );
 };
 
-export default ParkingSlotManagement;
+export default ParkingState;
