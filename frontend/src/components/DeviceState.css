@@ -1,0 +1,84 @@
+/* Globalne ustawienia */
+body {
+    background-color: #f5f5f5; /* Jasne tło dla kontrastu */
+    color: #333; /* Tekst w stonowanym odcieniu */
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Nagłówek */
+.parking-state-header {
+    font-size: 48px; /* Większy i bardziej wyrazisty napis */
+    font-weight: bold;
+    color: #000; /* Czarny tekst */
+    text-align: center;
+    margin: 40px 0; /* Większe odstępy od góry i dołu */
+}
+
+/* Kontener dla kafelków */
+.tile-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* Odstęp między kafelkami */
+    justify-content: center;
+    padding: 40px; /* Dodatkowe odstępy wewnętrzne */
+}
+
+/* Wygląd kafelka */
+.tile {
+    border-radius: 16px; /* Zaokrąglone rogi */
+    width: 260px; /* Większy rozmiar kafelków */
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #28a745; /* Zielony dla wolnych miejsc */
+    color: #ffffff; /* Tekst w białym kolorze */
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 18px; /* Większa czcionka */
+}
+
+/* Interakcja z kafelkiem */
+.tile:hover {
+    transform: scale(1.1); /* Powiększenie przy najechaniu */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); /* Zwiększony cień */
+    cursor: pointer;
+}
+
+/* Kolory dla różnych stanów */
+.tile-occupied {
+    background-color: #dc3545; /* Czerwony dla zajętych miejsc */
+}
+
+.tile-available {
+    background-color: #28a745; /* Zielony dla wolnych miejsc */
+}
+
+/* Aktywny kafelek */
+.tile-active {
+    border: 4px solid #ffc107; /* Złoty obrys dla aktywnego kafelka */
+}
+
+/* Responsywność dla mniejszych ekranów */
+@media (max-width: 768px) {
+    .tile {
+        width: 200px;
+        height: 160px;
+    }
+
+    .parking-state-header {
+        font-size: 36px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tile {
+        width: 160px;
+        height: 120px;
+        font-size: 14px; /* Zmniejszenie tekstu na mniejszych ekranach */
+    }
+}
